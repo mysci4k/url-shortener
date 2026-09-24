@@ -44,8 +44,12 @@ public class UrlShortenerService {
 
     @Transactional
     public String getOriginalUrlAndTrack(String shortCode) {
-        ShortUrl url = repository.findByShortCode(shortCode)
+        ShortUrl url = repository.findActiveByShortCode(shortCode)
                 .orElseThrow(() -> new UrlNotFoundException(shortCode));
+
+        if (url.isExpired()) {
+            throw new UrlNotFoundException(shortCode);
+        }
 
         url.incrementClickCount();
         repository.save(url);
