@@ -28,8 +28,14 @@ public class ShortUrl {
     @Column(name = "click_count", nullable = false)
     private long clickCount = 0L;
 
+    @Column(name = "expires_at")
+    private LocalDateTime expiresAt;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     public ShortUrl(Long id, String originalUrl, String shortCode) {
         this.id = id;
