@@ -3,6 +3,7 @@ package com.mysci4k.shortener.service;
 import com.mysci4k.shortener.dto.ShortenRequest;
 import com.mysci4k.shortener.dto.ShortenResponse;
 import com.mysci4k.shortener.entity.ShortUrl;
+import com.mysci4k.shortener.exception.UrlNotFoundException;
 import com.mysci4k.shortener.repository.ShortUrlRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,5 +32,16 @@ public class UrlShortenerService {
                 entity.getOriginalUrl(),
                 shortCode
         );
+    }
+
+    @Transactional
+    public String getOriginalUrlAndTrack(String shortCode) {
+        ShortUrl url = repository.findByShortCode(shortCode)
+                .orElseThrow(() -> new UrlNotFoundException(shortCode));
+
+        url.incrementClickCount();
+        repository.save(url);
+
+        return url.getOriginalUrl();
     }
 }
