@@ -26,7 +26,7 @@ public class ShortUrl {
     private String shortCode;
 
     @Column(name = "click_count", nullable = false)
-    private Long clickCount = 0L;
+    private long clickCount = 0L;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
