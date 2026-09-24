@@ -30,4 +30,11 @@ public class ShortUrl {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    public ShortUrl(Long id, String originalUrl, String shortCode) {
+        this.id = id;
+        this.originalUrl = originalUrl;
+        this.shortCode = shortCode;
+        this.createdAt = LocalDateTime.now();
+    }
 }
