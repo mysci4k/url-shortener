@@ -51,4 +51,12 @@ public class ShortUrl {
     public boolean isExpired() {
         return expiresAt != null && LocalDateTime.now().isAfter(expiresAt);
     }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
+    }
+
+    public void markAsDeleted() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }
