@@ -59,13 +59,18 @@ public class UrlShortenerService {
 
     @Transactional(readOnly = true)
     public UrlStatsResponse getUrlStats(String shortCode) {
-        ShortUrl url = repository.findByShortCode(shortCode)
+        ShortUrl url = repository.findActiveByShortCode(shortCode)
                 .orElseThrow(() -> new UrlNotFoundException(shortCode));
+
+        if (url.isExpired()) {
+            throw new UrlNotFoundException(shortCode);
+        }
 
         return new UrlStatsResponse(
                 url.getShortCode(),
                 url.getOriginalUrl(),
                 url.getClickCount(),
+                url.getExpiresAt(),
                 url.getCreatedAt()
         );
     }
