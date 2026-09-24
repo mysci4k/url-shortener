@@ -6,5 +6,6 @@ public record UrlStatsResponse(
         String shortCode,
         String originalUrl,
         long clickCount,
+        LocalDateTime expiresAt,
         LocalDateTime createdAt
 ) {}
