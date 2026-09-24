@@ -47,4 +47,8 @@ public class ShortUrl {
     public void incrementClickCount() {
         this.clickCount++;
     }
+
+    public boolean isExpired() {
+        return expiresAt != null && LocalDateTime.now().isAfter(expiresAt);
+    }
 }
