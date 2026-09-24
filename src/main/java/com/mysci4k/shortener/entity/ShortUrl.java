@@ -37,4 +37,8 @@ public class ShortUrl {
         this.shortCode = shortCode;
         this.createdAt = LocalDateTime.now();
     }
+
+    public void incrementClickCount() {
+        this.clickCount++;
+    }
 }
