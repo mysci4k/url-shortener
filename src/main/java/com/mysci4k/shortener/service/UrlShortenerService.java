@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UrlShortenerService {
@@ -26,12 +28,17 @@ public class UrlShortenerService {
         String shortCode = base62Encoder.encode(id);
 
         ShortUrl entity = new ShortUrl(id, request.url(), shortCode);
+
+        if (request.expiredInDays() != null) {
+            entity.setExpiresAt(LocalDateTime.now().plusDays(request.expiredInDays()));
+        }
         repository.save(entity);
 
         return new ShortenResponse(
                 baseUrl + "/" + shortCode,
                 entity.getOriginalUrl(),
-                shortCode
+                shortCode,
+                entity.getExpiresAt()
         );
     }
 
