@@ -1,0 +1,5 @@
+ALTER TABLE short_urls ADD COLUMN deleted_at TIMESTAMP;
+
+CREATE INDEX idx_short_urls_deleted_at
+    ON short_urls (deleted_at)
+    WHERE deleted_at IS NOT NULL;
