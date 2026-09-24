@@ -74,4 +74,17 @@ public class UrlShortenerService {
                 url.getCreatedAt()
         );
     }
+
+    @Transactional
+    public void deleteUrl(String shortCode) {
+        ShortUrl url = repository.findActiveByShortCode(shortCode)
+                .orElseThrow(() -> new UrlNotFoundException(shortCode));
+
+        if (url.isExpired()) {
+            throw new UrlNotFoundException(shortCode);
+        }
+
+        url.markAsDeleted();
+        repository.save(url);
+    }
 }
