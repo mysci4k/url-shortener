@@ -2,6 +2,7 @@ package com.mysci4k.shortener.service;
 
 import com.mysci4k.shortener.dto.ShortenRequest;
 import com.mysci4k.shortener.dto.ShortenResponse;
+import com.mysci4k.shortener.dto.UrlStatsResponse;
 import com.mysci4k.shortener.entity.ShortUrl;
 import com.mysci4k.shortener.exception.UrlNotFoundException;
 import com.mysci4k.shortener.repository.ShortUrlRepository;
@@ -43,5 +44,18 @@ public class UrlShortenerService {
         repository.save(url);
 
         return url.getOriginalUrl();
+    }
+
+    @Transactional(readOnly = true)
+    public UrlStatsResponse getUrlStats(String shortCode) {
+        ShortUrl url = repository.findByShortCode(shortCode)
+                .orElseThrow(() -> new UrlNotFoundException(shortCode));
+
+        return new UrlStatsResponse(
+                url.getShortCode(),
+                url.getOriginalUrl(),
+                url.getClickCount(),
+                url.getCreatedAt()
+        );
     }
 }
