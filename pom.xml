@@ -13,22 +13,22 @@
     <groupId>com.mysci4k</groupId>
     <artifactId>shortener</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>url-shortener</name>
+    <name>URL shortener</name>
     <description>REST API for shortening URLs</description>
 
-    <url/>
+    <url>https://github.com/mysci4k/url-shortener</url>
     <licenses>
-        <license/>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <id>mysci4k</id>
+            <url>https://github.com/mysci4k</url>
+        </developer>
     </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
 
     <properties>
         <java.version>21</java.version>
