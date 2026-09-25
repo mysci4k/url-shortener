@@ -19,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 @Aspect
 @Component
@@ -39,7 +40,7 @@ public class RateLimitAspect {
         int refill = rateLimited.refill() > 0 ? rateLimited.refill() : capacity;
         Duration duration = toDuration(rateLimited.duration(), rateLimited.timeUnit());
 
-        BucketConfiguration config = BucketConfiguration.builder()
+        Supplier<BucketConfiguration> configSupplier = () -> BucketConfiguration.builder()
                 .addLimit(
                         Bandwidth.builder()
                                 .capacity(capacity)
@@ -47,7 +48,7 @@ public class RateLimitAspect {
                                 .build()
                 ).build();
 
-        Bucket bucket = proxyManager.builder().build(bucketKey, config);
+        Bucket bucket = proxyManager.builder().build(bucketKey, configSupplier);
 
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
         if (probe.isConsumed()) {
