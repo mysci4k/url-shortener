@@ -13,8 +13,6 @@ public interface ShortUrlRepository extends JpaRepository<ShortUrl, Long> {
     @Query("SELECT s FROM ShortUrl s WHERE s.shortCode = :shortCode AND s.deletedAt IS NULL")
     Optional<ShortUrl> findActiveByShortCode(@Param("shortCode") String shortCode);
 
-    boolean existsByShortCode(String shortCode);
-
     @Query(value = "SELECT nextval('short_url_id_seq')", nativeQuery = true)
     Long fetchNextId();
 
