@@ -18,7 +18,7 @@ public class RedirectController {
     private final UrlShortenerService service;
 
     @GetMapping("/{shortCode}")
-    @RateLimited(capacity = 50, duration = 1, timeUnit = TimeUnit.MINUTES)
+    @RateLimited(capacity = 50, timeUnit = TimeUnit.MINUTES)
     public ResponseEntity<Void> redirectToOriginalUrl(@PathVariable String shortCode) {
         String originalUrl = service.getOriginalUrlAndTrack(shortCode);
 

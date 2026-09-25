@@ -20,7 +20,7 @@ public class UrlController {
     private final UrlShortenerService service;
 
     @PostMapping
-    @RateLimited(capacity = 10, duration = 1, timeUnit = TimeUnit.MINUTES)
+    @RateLimited(capacity = 10, timeUnit = TimeUnit.MINUTES)
     public ResponseEntity<ShortenResponse> generateShortenedLink(@Valid @RequestBody ShortenRequest request) {
         ShortenResponse response = service.createShortenedUrl(request);
 
@@ -28,7 +28,7 @@ public class UrlController {
     }
 
     @GetMapping("/{shortCode}/stats")
-    @RateLimited(capacity = 30, duration = 1, timeUnit = TimeUnit.MINUTES)
+    @RateLimited(capacity = 30, timeUnit = TimeUnit.MINUTES)
     public ResponseEntity<UrlStatsResponse> retrieveUrlStats(@PathVariable String shortCode) {
         UrlStatsResponse response = service.getUrlStats(shortCode);
 
@@ -36,7 +36,7 @@ public class UrlController {
     }
 
     @DeleteMapping("/{shortCode}")
-    @RateLimited(capacity = 10, duration = 1, timeUnit = TimeUnit.MINUTES)
+    @RateLimited(capacity = 10, timeUnit = TimeUnit.MINUTES)
     public ResponseEntity<Void> deleteUrl(@PathVariable String shortCode) {
         service.deleteUrl(shortCode);
 
