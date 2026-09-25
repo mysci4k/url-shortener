@@ -4,6 +4,7 @@ import com.mysci4k.shortener.exception.RateLimitExceededException;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.BucketConfiguration;
+import io.github.bucket4j.ConsumptionProbe;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -47,11 +48,18 @@ public class RateLimitAspect {
                 ).build();
 
         Bucket bucket = proxyManager.builder().build(bucketKey, config);
-        if (bucket.tryConsume(1)) {
+
+        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+        if (probe.isConsumed()) {
             return joinPoint.proceed();
         }
 
-        throw new RateLimitExceededException();
+        long waitSeconds = TimeUnit.NANOSECONDS.toSeconds(probe.getNanosToWaitForRefill());
+        if (waitSeconds < 1) {
+            waitSeconds = 1;
+        }
+
+        throw new RateLimitExceededException(waitSeconds);
     }
 
     private String resolveClientKey() {
